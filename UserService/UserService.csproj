@@ -32,7 +32,6 @@
     <Folder Include="Data\Models\Redis\" />
     <Folder Include="Connections\" />
     <Folder Include="Settings\" />
-    <Folder Include="Publishers\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 

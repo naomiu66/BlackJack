@@ -4,8 +4,8 @@
     <File Path=".gitignore" />
     <File Path="docker-compose.yml" />
   </Folder>
-  <Project Path="BlackJack/TelegramService.csproj" />
   <Project Path="Contracts/Contracts.csproj" />
   <Project Path="GameService/GameService.csproj" />
+  <Project Path="TelegramService/TelegramService.csproj" />
   <Project Path="UserService/UserService.csproj" />
 </Solution>

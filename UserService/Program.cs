@@ -4,6 +4,7 @@ using UserService.Data;
 using UserService.Data.Repositories.Abstractions;
 using UserService.Data.Repositories.Implementations;
 using UserService.Extensions;
+using UserService.Publishers;
 using UserService.Services.Abstractions;
 using UserService.Services.Implementations;
 
@@ -86,14 +87,13 @@ namespace UserService
                 });
             });
 
-            // Add services to the container.
+            builder.Services.AddScoped<IMessagePublisher, MessagePublisher>();
 
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
             builder.Services.AddScoped<IUsersService, UsersService>();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
