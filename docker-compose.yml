@@ -1,0 +1,94 @@
+
+services:
+  bot:
+    build:
+        context: .
+        dockerfile: TelegramService/Dockerfile
+    container_name: bot
+    restart: unless-stopped
+    env_file: 
+      - .env
+    ports:
+      - "5018:8080"
+      - "7132:8081"
+    depends_on:
+      # - user-service
+      # - game-service
+      - ngrok 
+      - rabbitmq
+    
+  game-service:
+    build:
+        context: .
+        dockerfile: GameService/Dockerfile
+    container_name: game-service
+    env_file: 
+      - .env
+    ports:
+      - "7061:8081"
+      - "5171:8080"
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+
+  user-service:
+    build:
+        context: .
+        dockerfile: UserService/Dockerfile
+    container_name: user-service
+    env_file: 
+      - .env
+    ports:
+      - "7020:8081"
+      - "5248:8080"
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+
+
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok
+    command:
+      - "http"
+      - "bot:8080"
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports:
+      - 4040:4040
+
+  postgres:
+    image: postgres:13
+    container_name: my_postgres_container
+    restart: unless-stopped
+    env_file: 
+      - .env
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+      image: redis:7
+      ports:
+          - "6379:6379"
+      env_file:
+          - .env
+
+  rabbitmq:
+      image: rabbitmq:3-management
+      ports:
+          - "5672:5672"
+          - "15672:15672"
+      env_file:
+          - .env
+
+volumes:
+  dbdata:
+  
+networks:
+    default:
+        name: api-network   
